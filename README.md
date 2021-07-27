@@ -4,6 +4,9 @@ This repository holds the code used to generate randomized mazes based off two p
 
 In general, the maze is as follows: 
 
+__Inputs__: 
+__Outputs__: 
+
 > Initialize
 >> For 
 >>> code
