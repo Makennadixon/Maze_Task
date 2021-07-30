@@ -12,7 +12,7 @@ import numpy as np
 
 makenna_folder = ''
 devin_folder = ''
-duncan_folder = '/Users/duncan/OneDrive - University of Delaware - o365/Documents/Experiments/Makenna/Maze_Task-Convert-and-Optimize'
+duncan_folder = '/Users/duncan/Documents/GitHub/Maze_Task'
 
 os.chdir(duncan_folder)
 
