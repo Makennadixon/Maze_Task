@@ -11,11 +11,7 @@ cd(duncan_folder);
 number_of_turns = 5;
 length_of_path = 10; 
 
-num_runs = 5; % use to make sure works all the time 
-
-for i = 1:num_runs
-    genMaze(number_of_turns, length_of_path); 
-end
+genMaze(number_of_turns, length_of_path); 
 
 %% Function 
 
@@ -80,6 +76,7 @@ W = [-1,0];
 % Then it can only go a certain direction
 
 % all these should have 2 (x,y) statements otherwise they may get overwritten 
+% Doing ^ will help to prevent 
 if startX == 9 && startY == 9
     w = [0, 0, 0.50, 0.50]; 
     
