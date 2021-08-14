@@ -209,7 +209,7 @@ rectangle('Position',[new_path_dirc,1,1], 'FaceColor','b');
             % new_path-dirc2 -> new x, y coordinates of maze path @ turn
 is_new_path_good = false;
 while (is_new_path_good == false)
-    rand_dirc = datasample([1 2 3 4],1,"Weights",w);
+    rand_dirc = datasample([1 2 3 4],1,"Weights",[0.25 0.25 0.25 0.25]);
 
             if rand_dirc == 1 || rand_dirc == 3
                 % randomly chooses between going east or west
