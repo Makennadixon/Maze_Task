@@ -6,23 +6,23 @@ In general, the maze algorithm utilizes two functions: (From MATLAB code)
 
 Generate Maze function 
 __Inputs__: 
-num_turns: number of turns
-path_length: number of blocks/ spaces to travel
-gridX: x maximum 
-gridY: Y maximum
-maxIter: maximum number of iterations
+- num_turns: number of turns
+- path_length: number of blocks/ spaces to travel
+- gridX: x maximum 
+- gridY: Y maximum
+- maxIter: maximum number of iterations
 
 __Outputs__: 
-visualization of random maze
+- visualization of random maze
 
 Random Choice function
 - Randomly choose 1 value from array with weights q (pseudo-unifrom)
 __Inputs__: 
-array: array of values [ N X 1]
-w: weights [ N X 1]
+- array: array of values [ N X 1]
+- w: weights [ N X 1]
 
 __Outputs__: 
-choice: element from array
+- choice: element from array
 
 Steps in which a single path maze is randomly generated with this algorthim are as followed:
 
