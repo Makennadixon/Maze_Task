@@ -5,6 +5,7 @@ This repository holds the code used to generate single path randomized mazes bas
 In general, the maze algorithm utilizes two functions: (From MATLAB code)
 
 Generate Maze function 
+
 __Inputs__: 
 - num_turns: number of turns
 - path_length: number of blocks/ spaces to travel
@@ -17,6 +18,7 @@ __Outputs__:
 
 Random Choice function
 - Randomly choose 1 value from array with weights q (pseudo-unifrom)
+
 __Inputs__: 
 - array: array of values [ N X 1]
 - w: weights [ N X 1]
