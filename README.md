@@ -36,5 +36,6 @@ Steps in which a single path maze is randomly generated with this algorthim are 
 6. The finish location of the maze will be where the last grid unit/blocks/space of the path ends.
 7. If the maze at any points does not meet the parameters, does not stays within the bounds of the grid or the path overlaps, then the maze algorthim will keep generating mazes until all specifications/parameters are met.
 
+Below is the python code within google colab notebook:
 
 An example of linking [colab](https://colab.research.google.com/drive/1hKHnlq2hOVKw1-x4CG4hURgCfPhSdJ1N?usp=sharing) in the markdown file. 
