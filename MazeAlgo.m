@@ -44,6 +44,7 @@ end
 is_new_path_good = false;
 currentIter = 1;
 while (is_new_path_good == false)
+close all;
 
 % Create a 10 by 10 grid
 xgrid = 0:1:gridX;
