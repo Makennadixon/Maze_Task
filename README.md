@@ -38,4 +38,4 @@ Steps in which a single path maze is randomly generated with this algorthim are 
 
 Below is the python code within google colab notebook:
 
-An example of linking [colab](https://colab.research.google.com/drive/1hKHnlq2hOVKw1-x4CG4hURgCfPhSdJ1N?usp=sharing) in the markdown file. 
+An example of linking [google colab notebook](https://colab.research.google.com/drive/1hKHnlq2hOVKw1-x4CG4hURgCfPhSdJ1N?usp=sharing) in the markdown file. 

@@ -1,24 +1,23 @@
-%% Makenna Maze Generation Algorithm and Example
-clear; clc; close all 
-
 %% Call function 
 
 number_of_turns = 6;
 length_of_path = 15;
+gridX = 10; 
+gridY = 10;
+maxIter = 350;
 
-genMaze(number_of_turns, length_of_path); 
+genMaze(number_of_turns, length_of_path, gridX, gridY, maxIter); 
 
 
 %% Function 
 
-function genMaze(num_turns, path_length, varargin)
+function genMaze(num_turns, path_length, gridX, gridY, maxIter)
 %{
 Generate random maze 
 
 INPUTS:
 num_turns: # of turns 
 path_length: # of blocks / spaces to travel 
-varargin:
 gridX: x maximum
 gridY: y maximum
 maxIter: maximum number of iterations
@@ -33,41 +32,37 @@ arguments
         mustBeInteger, mustBeNumeric, mustBeNonempty}
     path_length (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
         mustBeInteger, mustBeNumeric, mustBeNonempty}
+    gridX (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
+        mustBeInteger, mustBeNumeric, mustBeNonempty}
+    gridY (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
+        mustBeInteger, mustBeNumeric, mustBeNonempty}
+    maxIter (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
+        mustBeInteger, mustBeNumeric, mustBeNonempty}
 end
-arguments (Repeating)
-    varargin
-end
-%% parse inputs 
-parsed = inputParser();
-addRequired(parsed, 'num_turns')
-addRequired(parsed, 'path_length')
-addOptional(parsed, 'gridX', 10, @(x) isscalar(x) & ispositive(x) & isnumeric(x)); 
-addOptional(parsed, 'gridY', 10, @(x) isscalar(x) & ispositive(x) & isnumeric(x)); 
-addOptional(parsed, 'maxIter', 1e3, @(x) isscalar(x) & ispositive(x) & isnumeric(x)); 
-parse(parsed, num_turns, path_length, varargin{:}); 
-
 
 %% Create grid
 is_new_path_good = false;
 currentIter = 1;
 while (is_new_path_good == false)
+close all;
 
-% Create a grid
-xgrid = 0:1:parsed.Results.gridX;
-ygrid = 0:1:parsed.Results.gridY;
+% Create a 10 by 10 grid
+xgrid = 0:1:gridX;
+ygrid = 0:1:gridY;
 
 % Initiate random start location 
-startX = randi([1 parsed.Results.gridX-1]); 
-startY = randi([1 parsed.Results.gridY-1]); 
+startX = randi([1 gridX-1]); 
+startY = randi([1 gridY-1]); 
 start_current_position = [startX, startY]; 
 
-% display grid
+% display 10 by 10 grid
  figure(); 
  arrayfun(@(x)xline(x,'k', "LineWidth",2), xgrid);
  arrayfun(@(y)yline(y,'k','LineWidth',2), ygrid);
-hold on
+ hold on
+ 
 % display green start location on grid
- arrayfun(@(x)xline(x,'k', "LineWidth",2),xgrid), ...
+arrayfun(@(x)xline(x,'k', "LineWidth",2),xgrid), ...
     (rectangle('Position',[startX,startY,1,1],'FaceColor','g'));
 
 arrayfun(@(y)yline(y,'k','LineWidth',2),ygrid,'UniformOutput', false), ...
@@ -81,11 +76,6 @@ N = [0,1];
 E = [1,0];
 S = [0,-1];
 W = [-1,0];
-
-% This if statement starts the path of maze based off of the starting grid location
-
-% when the x, y coordinates are on the bounds of the grid
-% Then it can only go a certain direction
 
 if startX == 9 && startY == 9
     w = [0, 0, 0.50, 0.50]; 
@@ -113,14 +103,11 @@ elseif startX == 0 && startY == 9
     
 elseif startX ~= 9 || startX ~= 0 && ...
         startY ~= 9 || startY ~= 0
-    % When the start location is within the outer bounds
-    % can equally randomize the direction of the start grid path
+   
     w = [0.25, 0.25, 0.25, 0.25];
     
 end
 
-% Use datasample to randomize direction types based on where the path can
-% contiune on to next
 rand_dirc = random_choice([1 2 3 4], w);
 
 if rand_dirc == 1 % North
@@ -149,11 +136,26 @@ p = new;
 Max_lengths = num_turns+1;
 
 %{
-Paragraph about what is happening here please 
+ (randi([0,path_length-Max_lengths],1,Max_lengths-1))
+    %Returns size [1xMax_lengths-1] vector of random integers
+    %Between 0 and path_length - Max_lengths
+
+sort the output of the randi array in order from ascending order
+    % returns [1xMax_lengths-1] vector of sorted random values in ascending
+    % order
+
+find the diff of ([0, sorted ouput, pth_length - max_length])
+    % returns [1 x max_length] vector of segment legnths
+    % will find the difference between each element in vector
+
+ +ones(1,Max_lengths)
+    % returns [1 x max_length] vector of segment lenghts
+    % adds the [1 x max_lengths] vector to the vector of difference values 
+
 %}
 c = (diff([0,sort(randi([0,path_length-Max_lengths],1,num_turns)),path_length-Max_lengths])+ones(1,Max_lengths));
 
-% in order to update the new coordinates of maze path
+% update the new coordinates of maze path
 new_path_dirc = p;
 % iterate through the length of c
 for i = 1:length(c)
@@ -169,35 +171,31 @@ for i = 1:length(c)
             % substract that individual element by one
             c(i) = c(i) - 1;
 
-            % p(1) -> x coordinate of maze path
-            % p(2) -> y coordinate of maze path
-            % new_path_dirc -> new x,y coordinates used to create the maze on grid
+        % create path in north direction
+            if rand_dirc == 1
+            new_path_dirc = p + N;
+        % create path in east direction
+            elseif rand_dirc == 2
+            new_path_dirc = p + E;
+        % create path in south direction
+            elseif rand_dirc == 3
+            new_path_dirc = p + S;
+        % create path in west direction
+            elseif rand_dirc == 4
+            new_path_dirc = p + W;
+            end
+            %checks for if path is within bounds or overlaps
+            if (new_path_dirc(1) < 0 || new_path_dirc(1) > 9 || new_path_dirc(2) < 0 || new_path_dirc(2) > 9) || sum(sum(new_path_dirc == maze_position, 2) == 2) > 0
+                is_new_path_good = false;
+            else
+                is_new_path_good = true;
+            end
 
-% create path in north direction
-    if rand_dirc == 1
-    new_path_dirc = p + N;
-% create path in east direction
-    elseif rand_dirc == 2
-    new_path_dirc = p + E;
-% create path in south direction
-    elseif rand_dirc == 3
-    new_path_dirc = p + S;
-% create path in west direction
-    elseif rand_dirc == 4
-    new_path_dirc = p + W;
-    end
-    %checks for if path is within bounds or overlaps
-    if (new_path_dirc(1) < 0 || new_path_dirc(1) > 9 || new_path_dirc(2) < 0 || new_path_dirc(2) > 9) || sum(sum(new_path_dirc == maze_position, 2) == 2) > 0
-        is_new_path_good = false;
-    else
-        is_new_path_good = true;
-    end
-    
-    if currentIter == parsed.Results.maxIter
-        fprintf('Algorithm did not converege. Try again.\n')
-        return
-    end 
-    currentIter = currentIter +1;
+            if currentIter == maxIter
+                fprintf('Algorithm did not converege. Try again.\n')
+                return
+            end 
+            currentIter = currentIter +1;
 
 
 maze_position = [maze_position; new_path_dirc];
@@ -213,10 +211,6 @@ rectangle('Position',[new_path_dirc,1,1], 'FaceColor','b');
             c(i) = c(i) - 1;
             % update the value of p
             p = new_path_dirc;
-
-            % new_path_dirc(1) -> x coordinate of maze path @ turn
-            % new_path_dirc(2) -> y coordinate of maze path @ turn
-            % new_path-dirc2 -> new x, y coordinates of maze path @ turn
 
             % change direction E W
             % when direction of path is either going north or south
@@ -259,17 +253,17 @@ rectangle('Position',[new_path_dirc,1,1], 'FaceColor','b');
                 is_new_path_good = true;
             end 
             
-if currentIter == parsed.Results.maxIter
- warning('\nAlgorithm did not converge. Try Aagin.\n')  
- return
-end
-currentIter = currentIter +1;
+            if currentIter == maxIter
+             fprintf('Algorithm did not converge. Try Aagin.\n')  
+             return
+            end
+            currentIter = currentIter +1;
 
 
 maze_position = [maze_position; new_path_dirc2];
 path_array = [path_array; is_new_path_good];
-            % creates the path of maze on the grid
-            rectangle('Position',[new_path_dirc2,1,1], 'FaceColor','b')
+% creates the path of maze on the grid
+rectangle('Position',[new_path_dirc2,1,1], 'FaceColor','b')
 
         end
 
@@ -295,15 +289,15 @@ if c(i) == 1 && i == Max_lengths
     
         if (finish_location(1) < 0 || finish_location(1) > 9 || finish_location(2) < 0 || finish_location(2) > 9) || sum(sum(finish_location == maze_position, 2) == 2) >0 || any(x == 1)
             is_new_path_good = false;
-            fprintf('Path does not satisfy parameters\n')
+            fprintf('path does not satisfy parameters.\n')
         else
             is_new_path_good = true;
-            fprintf('Algorithm converged\n') 
+            fprintf('Algorithm converged.\n') 
         end
-            if currentIter == parsed.Results.maxIter
-                warning('\nAlgorithm did not converge. Try again.\n')
+        if currentIter == maxIter
+          fprintf('Algorithm did not converge. Try again.\nConsider either increasing grid area, increasing maximum number of iterations, decreasing number of turns, or decreasing path length.')
                 return
-            end
+        end
 currentIter = currentIter +1; 
 
 maze_position = [maze_position; finish_location];
