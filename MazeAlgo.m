@@ -1,31 +1,24 @@
 %% Makenna Maze Generation Algorithm and Example
-% clear; clc; 
-% makenna_folder = '';
-% devin_folder = '';
-% duncan_folder = '/Users/duncan/Documents/GitHub/Maze_Task';
-% 
-% cd(duncan_folder); 
+clear; clc; close all 
 
 %% Call function 
 
 number_of_turns = 6;
 length_of_path = 15;
-gridX = 10; 
-gridY = 10;
-maxIter = 350;
 
-    genMaze(number_of_turns, length_of_path, gridX, gridY, maxIter); 
+genMaze(number_of_turns, length_of_path); 
 
 
 %% Function 
 
-function genMaze(num_turns, path_length, gridX, gridY, maxIter)
+function genMaze(num_turns, path_length, varargin)
 %{
 Generate random maze 
 
 INPUTS:
 num_turns: # of turns 
 path_length: # of blocks / spaces to travel 
+varargin:
 gridX: x maximum
 gridY: y maximum
 maxIter: maximum number of iterations
@@ -40,29 +33,35 @@ arguments
         mustBeInteger, mustBeNumeric, mustBeNonempty}
     path_length (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
         mustBeInteger, mustBeNumeric, mustBeNonempty}
-    gridX (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
-        mustBeInteger, mustBeNumeric, mustBeNonempty}
-    gridY (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
-        mustBeInteger, mustBeNumeric, mustBeNonempty}
-    maxIter (1,1) {mustBePositive, mustBeFinite, mustBeReal, ...
-        mustBeInteger, mustBeNumeric, mustBeNonempty}
 end
+arguments (Repeating)
+    varargin
+end
+%% parse inputs 
+parsed = inputParser();
+addRequired(parsed, 'num_turns')
+addRequired(parsed, 'path_length')
+addOptional(parsed, 'gridX', 10, @(x) isscalar(x) & ispositive(x) & isnumeric(x)); 
+addOptional(parsed, 'gridY', 10, @(x) isscalar(x) & ispositive(x) & isnumeric(x)); 
+addOptional(parsed, 'maxIter', 1e3, @(x) isscalar(x) & ispositive(x) & isnumeric(x)); 
+parse(parsed, num_turns, path_length, varargin{:}); 
+
 
 %% Create grid
 is_new_path_good = false;
 currentIter = 1;
 while (is_new_path_good == false)
 
-% Create a 10 by 10 grid
-xgrid = 0:1:gridX;
-ygrid = 0:1:gridY;
+% Create a grid
+xgrid = 0:1:parsed.Results.gridX;
+ygrid = 0:1:parsed.Results.gridY;
 
 % Initiate random start location 
-startX = randi([1 gridX-1]); 
-startY = randi([1 gridY-1]); 
+startX = randi([1 parsed.Results.gridX-1]); 
+startY = randi([1 parsed.Results.gridY-1]); 
 start_current_position = [startX, startY]; 
 
-% display 10 by 10 grid
+% display grid
  figure(); 
  arrayfun(@(x)xline(x,'k', "LineWidth",2), xgrid);
  arrayfun(@(y)yline(y,'k','LineWidth',2), ygrid);
@@ -194,7 +193,7 @@ for i = 1:length(c)
         is_new_path_good = true;
     end
     
-    if currentIter == maxIter
+    if currentIter == parsed.Results.maxIter
         fprintf('Algorithm did not converege. Try again.\n')
         return
     end 
@@ -260,8 +259,8 @@ rectangle('Position',[new_path_dirc,1,1], 'FaceColor','b');
                 is_new_path_good = true;
             end 
             
-if currentIter == maxIter
- fprintf('Algorithm did not converge. Try Aagin.\n')  
+if currentIter == parsed.Results.maxIter
+ warning('\nAlgorithm did not converge. Try Aagin.\n')  
  return
 end
 currentIter = currentIter +1;
@@ -296,13 +295,13 @@ if c(i) == 1 && i == Max_lengths
     
         if (finish_location(1) < 0 || finish_location(1) > 9 || finish_location(2) < 0 || finish_location(2) > 9) || sum(sum(finish_location == maze_position, 2) == 2) >0 || any(x == 1)
             is_new_path_good = false;
-            fprintf('path does not satisfy parameters')
+            fprintf('Path does not satisfy parameters\n')
         else
             is_new_path_good = true;
             fprintf('Algorithm converged\n') 
         end
-            if currentIter == maxIter
-                fprintf('Algorithm did not converge. Try again.\n')
+            if currentIter == parsed.Results.maxIter
+                warning('\nAlgorithm did not converge. Try again.\n')
                 return
             end
 currentIter = currentIter +1; 

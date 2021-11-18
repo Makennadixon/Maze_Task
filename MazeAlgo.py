@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!~/opt/anaconda3/bin/python
 # -*- coding: utf-8 -*-
 
 # Maze Generation Algorithm 
@@ -28,10 +28,10 @@ def makeMaze(num_turns, path_length):
 
     '''
 
-    turnTimes = np.random.choice(range(1,path_length-1), num_turns, replace=False);
+    turnTimes = np.random.choice(range(1,path_length-1), num_turns, replace=False)
     # can't turn to start and to end 
     
-    direction  = np.random.choice(4);
+    direction  = np.random.choice(4)
     
     directions = np.zeros(shape=(path_length,1))
     
@@ -132,25 +132,25 @@ def checkBounds(agent_position, xMin, xMax, yMin, yMax):
         
     return withinBounds
 
-def GenerateAndTest(xMax, yMax, numTurns, pathLength, xMin=0, yMin=0, maxIter=250):
+def GenerateAndTest(numTurns, pathLength, xMax=10, yMax=10,  xMin=0, yMin=0, maxIter=250):
     '''
 
     Parameters
     ----------
-    xMax : int
-        maximum x value.
-    yMax : int
-        maximum maximum y value.
     numTurns : int
         number of turns for maze.
     pathLength : int
         number of blocks maze traverses.
+    xMax : int, optional
+        maximum x value. The defalt is 10.
+    yMax : int, optional
+        maximum maximum y value. The default is 10. 
     xMin : int, optional
         minimum x value. The default is 0.
     yMin : int, optional
         minimum y value. The default is 0.
     maxIter : int, optional
-        number of iterations for "convergence". The default is 100.
+        number of iterations for "convergence". The default is 250.
 
     Returns
     -------
@@ -232,8 +232,6 @@ def GenerateAndTest(xMax, yMax, numTurns, pathLength, xMin=0, yMin=0, maxIter=25
 # %% Algorithm          
 
 # Hyperparameters
-xmin, xmax, ymin, ymax = 0, 10, 0, 10
 number_of_turns, length_of_path = 5, 15
-maximum_iterations = 500
 
-GenerateAndTest(xmax, ymax, number_of_turns, length_of_path)
+GenerateAndTest(number_of_turns, length_of_path)
